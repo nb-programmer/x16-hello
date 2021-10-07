@@ -28,8 +28,8 @@ AS			:= $(CCPATH)ca65
 LD			:= $(CCPATH)ld65
 
 #Compiler flags
-FLAGS		= -t $(TARGET) -I $(INCDIR) -I $(SRCDIR)
-CFLAGS		= $(FLAGS) -c -l $@.lst
+FLAGS		= -t $(TARGET) -I $(INCDIR) -I $(SRCDIR) --create-dep $(OBJDIR)/$*.d
+CFLAGS		= $(FLAGS) -c -l $@.lst -O
 AFLAGS		= $(FLAGS)
 LFLAGS		= -C $(CFGFILE) -m $(BUILDDIR)/memory.map
 
@@ -45,6 +45,9 @@ OBJ_ASM		= $(addprefix $(OBJDIR)/,$(patsubst %.asm,%.o,$(notdir $(M_ASM))))
 
 #Final list of objects to link
 OBJS		= $(OBJ_ASM) $(OBJ_SRC)
+
+#Dependency files created by the compiler
+DEPS		= $(OBJS:%.o=%.d)
 
 #== Build goals ==
 all: $(BUILDTARGET)
@@ -69,6 +72,8 @@ $(OBJDIR)/%_c.o: $(SRCDIR)/%.c | $(OBJDIR)
 #Generate binary/object files for assets/resources
 resources:
 
+#Load dependency files, if they exist
+-include $(DEPS)
 
 #Launch emulator and load the PRG rom. If it doesn't exist, it will be built
 run: $(OUTPRG)
