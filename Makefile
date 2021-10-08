@@ -7,6 +7,8 @@ BUILDDIR	:= build
 OBJDIR		:= obj
 INCDIR		:= include
 SRCDIR		:= src
+RESDIR		:= $(SRCDIR)/res
+TOOLDIR		:= tools
 OUTPRG		:= $(BUILDDIR)/hello.prg
 LIBS		:= cx16.lib
 
@@ -62,15 +64,23 @@ $(OUTPRG): $(OBJS) | resources $(BUILDDIR)
 	$(LD) $(LFLAGS) -o $@ $^ $(LIBS)
 
 #Assemble .asm source files to object code
-$(OBJDIR)/%.o: $(SRCDIR)/%.asm | $(OBJDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.asm | binres $(OBJDIR)
 	$(AS) $(AFLAGS) -o $@ $<
 
 #Compile .c source files to object code
-$(OBJDIR)/%_c.o: $(SRCDIR)/%.c | $(OBJDIR)
+$(OBJDIR)/%_c.o: $(SRCDIR)/%.c | binres $(OBJDIR)
 	$(CC) $(CFLAGS) -o $@ $<
 
-#Generate binary/object files for assets/resources
-resources:
+#== Resources and Assets ==
+#Generate binary/object files for assets/resources at link-time
+resources: binres
+
+#Resources that will be included directly in a source file
+#These will be generated before compiling any source
+binres: $(OBJDIR)
+
+#Include Makefile for resources. You can add more dependencies to 'resources' and 'binres'
+-include $(RESDIR)/Makefile
 
 #Load dependency files, if they exist
 -include $(DEPS)
