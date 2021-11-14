@@ -72,8 +72,7 @@ DEPS		= $(OBJS:%.o=%.d)
 #== Build goals ==
 all: $(BUILDTARGET)
 
-debug: FLAGS += -d
-debug: FLAGS += -D _DEBUG
+debug: FLAGS += -d -D _DEBUG
 debug: $(OUTPRG)
 
 release: $(OUTPRG)
