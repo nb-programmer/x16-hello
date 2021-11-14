@@ -107,7 +107,7 @@ binres: $(OBJDIR)
 run: $(BUILDTARGET) runemu
 
 #Launch emulator with the input PRG file
-runemu: $(OUTPRG)
+runemu: $(OUTPRG) | $(if $(findstring -sdcard, $(EFLAGS)), $(SDCARD))
 ifeq ($(EMUCHDIR), true)
 	cd $(dir $<) && $(X16EMU) $(EFLAGS) -prg $(notdir $<)
 else
