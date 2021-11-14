@@ -24,9 +24,10 @@ CFGFILE		:= cx16.cfg
 #== Emulator config ==
 #Emulator path
 X16EMU		:= x16emu
+EFLAGS		= 
 
 #Uncomment to launch the PRG on start-up
-EFLAGS		= -run
+EFLAGS		+= -run
 
 #Uncomment to attach the SD card image specified above
 #EFLAGS		+= -sdcard $(SDCARD)
