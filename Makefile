@@ -14,8 +14,13 @@ LIBS		:= cx16.lib
 SDCARD		:= 
 
 #== Build tools ==
-SHELL		:= cmd
-MKDIR		:= $(SHELL) /E:ON /C mkdir
+SHELL := bash
+
+ifeq ($(OS),Windows_NT)
+    MKDIR := $(SHELL) /E:ON /C mkdir
+else
+    MKDIR := mkdir -p
+endif
 
 #== Target system config ==
 TARGET		:= cx16
